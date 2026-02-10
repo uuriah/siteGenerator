@@ -31,11 +31,11 @@ def copy_content(current_dir, copied):
             directories = full_path.replace(item, "")
             nested_dirs = directories.replace("./static", "")
             if nested_dirs != "/":
-                destination_path = os.path.join("./public/" + nested_dirs, filename)
-                os.makedirs("./public/" + nested_dirs, exist_ok=True)
+                destination_path = os.path.join("./docs/" + nested_dirs, filename)
+                os.makedirs("./docs/" + nested_dirs, exist_ok=True)
                 shutil.copy(full_path, destination_path)
             else:
-                shutil.copy(full_path, "./public")
+                shutil.copy(full_path, "./docs")
             copied.append(full_path)
     return copied
 

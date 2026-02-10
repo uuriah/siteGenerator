@@ -3,7 +3,7 @@ from htmlnode import ParentNode, LeafNode, HTMLNode
 from split_blocks import extract_title
 import os 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     with open(from_path, "r") as f:
@@ -21,6 +21,9 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html_string)
 
+    template = template.replace('href="/', f'href="{basepath}')
+    template = template.replace('src="/', f'src="{basepath}')
+
     dest_path_without_index = dest_path.replace("index.md", "")
     if not os.path.exists(dest_path_without_index):
         os.makedirs(dest_path_without_index, exist_ok=True)
@@ -31,7 +34,7 @@ def generate_page(from_path, template_path, dest_path):
 
     return "Page successfully generated"
 
-def generate_pages_recursively(dir_path_content, template_path, dest_dir_path, visited):
+def generate_pages_recursively(dir_path_content, template_path, dest_dir_path, visited, basepath):
 
     # create list of all files/dirs in content directory
     content_list = os.listdir(dir_path_content)
@@ -41,11 +44,11 @@ def generate_pages_recursively(dir_path_content, template_path, dest_dir_path, v
         if os.path.isdir(fullpath):
 
             if fullpath not in visited:
-                generate_pages_recursively(fullpath, template_path, dest_dir_path, visited)
+                generate_pages_recursively(fullpath, template_path, dest_dir_path, visited, basepath)
 
         elif os.path.isfile(fullpath):
-            dest_path = fullpath.replace("content", "public")
-            generate_page(fullpath, template_path, dest_path)
+            dest_path = fullpath.replace("content", "docs")
+            generate_page(fullpath, template_path, dest_path, basepath)
 
             visited.append(fullpath)
 
