@@ -51,3 +51,15 @@ def markdown_to_blocks(markdown):
         new_blocks.append(block)
 
     return new_blocks
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+
+    for block in blocks:
+        if block.startswith("# "):
+            lines = block.split('\n')
+            return lines[0].lstrip("# ")
+        
+    raise Exception("No title found")
+
+

@@ -1,5 +1,5 @@
 import unittest
-from split_blocks import markdown_to_blocks, block_to_block_type, BlockType 
+from split_blocks import markdown_to_blocks, block_to_block_type, extract_title, BlockType 
 
 class TestMarkdownToBlocks(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -81,6 +81,27 @@ class TestBlockTypes(unittest.TestCase):
         block = "1. Here\n2. Is \n3. A \n4. List"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, BlockType.ORDERED_LIST)
+
+class TestExtractTitle(unittest.TestCase):
+    def test_multiple_headers(self):
+        md = """
+# This is a title
+## This is not a title
+### This is just a header
+
+- This is a list
+- Of stuff
+"""
+        self.assertEqual(extract_title(md), "This is a title")
+
+    def test_no_title(self):
+        md = """
+## This is not a title
+### This also isn't a title
+"""
+        with self.assertRaises(Exception) as cm:
+            title = extract_title(md)
+        self.assertEqual(str(cm.exception), "No title found")
 
 if __name__ == "__main__":
     unittest.main()

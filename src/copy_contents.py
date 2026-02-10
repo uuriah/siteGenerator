@@ -32,7 +32,7 @@ def copy_content(current_dir, copied):
             nested_dirs = directories.replace("./static", "")
             if nested_dirs != "/":
                 destination_path = os.path.join("./public/" + nested_dirs, filename)
-                os.makedirs("./public/" + nested_dirs, exist_ok=False)
+                os.makedirs("./public/" + nested_dirs, exist_ok=True)
                 shutil.copy(full_path, destination_path)
             else:
                 shutil.copy(full_path, "./public")
